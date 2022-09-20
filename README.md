@@ -1,6 +1,4 @@
-In my Z80 dayes, I wrote a 32bit integer package and a 32bit [CORDIC package](http://www.andreadrian.de/oldcpu/Z80_number_cruncher.html). Now, I write a IEEE754 compatible floating point (fp) package for the 6502. There are some 6502 fp packages available. First the Steve Wozniak/Roy Rankin package that was published in Dr.Dobb's Journal in August 1976. Second the fp package in Microsoft BASIC for Apple 2, Commodore PET and others.
-
-Since 1985 IEEE754, the "IEEE Standard for Binary Floating-Point Arithmetic" is used for floating point. The Intel 8087 co-processor was one of the first implementations of IEEE754 in hardware. For me, IEEE754 is a good fp format for the 6502. Every IEEE754 fp number has three fields:
+Since 1985 IEEE754, the "IEEE Standard for Binary Floating-Point Arithmetic" is used for floating point. Every binary floating point packages needs floating point radix conversion from radix 10 (decimal) ASCII representation to radix 2 (binary) internal representation and back. This document describes a simple method to do radix conversion. Every IEEE754 fp number has three fields:
 - sign bit s
 - biased exponent e
 - unsigned improper fraction f
@@ -8,7 +6,7 @@ Since 1985 IEEE754, the "IEEE Standard for Binary Floating-Point Arithmetic" is 
 An improper fraction has a numerator that is greater than the denominator, like 3/2. The [Q notation](https://en.wikipedia.org/wiki/Q_(number_format)) or binary fixed point is helpful to understand improper binary fractions. The IEEE754 single (32bit) format has an unsigned Q1.23 improper fraction, that is one integer bit before the binary dot and 23 proper fraction bits after the binary bit. An unsigned Q1.23 number can store a decimal number in the range from 1.0 to 2.0 - 2^-22 or 1.9999997615... The right most bit in the Q1.23 number has the value 2^-22 or 0.0000002384...
 You can write a Q number as a decimal fraction or as an integer. The decimal fraction 1.0 is integer 1.0 * 2^23 = 8388608 = 0x800000. The decimal fraction 1.5 is 1.5 * 2^23 = 12582912 = 0xC00000, and 1.9999997615... is 16777215 = 0xFFFFFF. For decimal fraction to integer conversion, you multiply with 2^number_of_fraction_bits. For integer to decimal fraction conversion, you divide by 2^number_of_fraction_bits.
 
-Here are some IEEE754 single (32bit) numbers as printed by fraction.cpp:
+Here are some IEEE754 single (32bit) numbers as printed by fpconv.cpp:
 ```
   IEEE754  =  hexfloat  = s exp implicit = fraction  2^
  0.0000000 = 0x00000000 = 0   0 0x000000 = 1.0000000 -127
